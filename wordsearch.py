@@ -21,7 +21,9 @@ def generate_grid(size):
 
 
 def display_grid(grid):
-    click.echo(grid)
+    for row in grid:
+        click.echo(' '.join(row))
+
 
 def find_words(grid, valid_words):
     pass
