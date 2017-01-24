@@ -90,7 +90,8 @@ def _diagonal_down_right_strings(grid):
 
 
 def _diagonal_down_left_strings(grid):
-    return []
+    # cheat and rotate the grid 90 degrees and find down-right again
+    return _diagonal_down_right_strings(zip(*grid[::-1]))
 
 
 @click.command()
@@ -102,7 +103,6 @@ def search(size, min_length):
     grid = generate_grid(size)
     display_grid(grid)
     grid_strs = get_grid_strings(grid)
-    click.echo(grid_strs)
     found = find_words(grid_strs, valid_words)
 
     if found:
