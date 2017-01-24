@@ -5,9 +5,11 @@ from random import choice
 from string import ascii_lowercase
 
 
-def load_words():
+def load_words(min_length):
+    # add 1 to min_length to account for newling character -- faster than strip
+    min_length += 1
     with open('words.txt', 'r') as f:
-        return set(x.strip().lower() for x in f.readlines())
+        return set(x.strip().lower() for x in f.readlines() if len(x) >= min_length)
 
 
 def generate_grid(size):
@@ -69,7 +71,22 @@ def _vertical_strings(grid):
 
 
 def _diagonal_down_right_strings(grid):
-    return []
+    strs = list()
+    size = len(grid)
+    center_str = list()
+    for x in range(size):
+        center_str.append(grid[x][x])
+    strs.append(''.join(center_str))
+
+    for x in range(1, size):
+        this_str_1 = list()
+        this_str_2 = list()
+        for y in range(x, size):
+            this_str_1.append(grid[y][y - x])
+            this_str_2.append(grid[y - x][y])
+        strs.append(''.join(this_str_1))
+        strs.append(''.join(this_str_2))
+    return strs + _reverse_strs(strs)
 
 
 def _diagonal_down_left_strings(grid):
@@ -80,7 +97,7 @@ def _diagonal_down_left_strings(grid):
 @click.argument('size', default=12)
 @click.option('--min-length', '-n', default=0)
 def search(size, min_length):
-    valid_words = load_words()
+    valid_words = load_words(min_length)
     click.echo('Wordlist contains {} valid words.'.format(len(valid_words)))
     grid = generate_grid(size)
     display_grid(grid)
