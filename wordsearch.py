@@ -11,8 +11,17 @@ def load_words():
 
 
 def generate_grid(size):
-    pass
+    grid = list()
+    for _ in range(size):
+        row = list()
+        for _ in range(size):
+            row.append(choice(ascii_lowercase))
+        grid.append(row)
+    return grid
 
+
+def display_grid(grid):
+    click.echo(grid)
 
 def find_words(grid, valid_words):
     pass
@@ -25,6 +34,7 @@ def search(size, min_length):
     valid_words = load_words()
     click.echo('Wordlist contains {} valid words.'.format(len(valid_words)))
     grid = generate_grid(size)
+    display_grid(grid)
     found = find_words(grid, valid_words)
 
     if found:
